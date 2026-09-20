@@ -34,6 +34,16 @@ class Pipeline:
     def __init__(self, config_path: Path) -> None:
         self.config_path = config_path.resolve()
         self.config = json.loads(self.config_path.read_text(encoding="utf-8"))
+        required_research_file = (
+            RESEARCH / "ballPlayerTrajModel/publicData/kloppy_to_preprocessed.py"
+        )
+        if not required_research_file.is_file():
+            raise FileNotFoundError(
+                "The MCPS research sources are missing from this checkout. "
+                f"Expected: {required_research_file}. If this is Colab and the repository "
+                "directory already existed, run `git pull --ff-only` in the repository, "
+                "or delete the stale Colab checkout and rerun the clone cell."
+            )
         work = Path(self.config["work_dir"])
         self.work = work if work.is_absolute() else ROOT / work
         self.logs = self.work / "logs"
