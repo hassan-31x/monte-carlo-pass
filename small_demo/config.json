@@ -1,0 +1,34 @@
+{
+  "match_id": "J03WN1",
+  "seed": 42,
+  "work_dir": "artifacts/mcps_small",
+  "history_frames": 96,
+  "future_frames": 320,
+  "max_frames": 60000,
+  "split_ratios": [0.70, 0.15, 0.15],
+  "caps": {
+    "smart_train_windows": 512,
+    "smart_eval_windows": 64,
+    "touch_train": 8192,
+    "touch_eval": 1024,
+    "bat_train": 1024,
+    "bat_eval": 128,
+    "pv_train": 2048,
+    "pv_eval": 256
+  },
+  "training": {
+    "epochs": 10,
+    "smart_batch_size": 8,
+    "touch_batch_size": 128,
+    "bat_batch_size": 128,
+    "pv_batch_size": 16,
+    "num_workers": 2
+  },
+  "search": {
+    "max_clips": 5,
+    "local_variants": 16,
+    "global_variants": 16,
+    "context_len": 80,
+    "rollout_len": 128
+  }
+}

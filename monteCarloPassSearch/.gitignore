@@ -1,0 +1,74 @@
+# Python
+**/__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+
+# Binary checkpoints and generated arrays
+*.pt
+*.pth
+*.ckpt
+*.npy
+*.npz
+*.parquet
+*.log
+*.gif
+*.png
+checkpoint_exports/
+
+# Keep the small SMART vocab assets needed at runtime
+!trajModel_smart/vocabs/*.npz
+
+# Top-level directories not part of the repo
+sampleData/
+trajModel_allData/
+convert_sportec_to_metres.py
+monteCarloPassSearch/fullTrajVar/
+
+# Monte Carlo pass search artifacts and legacy analysis
+monteCarloPassSearch/initParamVar/archive_*/
+monteCarloPassSearch/initParamVar/CURRENT_VERSION.txt
+monteCarloPassSearch/initParamVar/clip*_percentile_single.csv
+monteCarloPassSearch/initParamVar/pass_*.csv
+monteCarloPassSearch/initParamVar/passer_rankings*.csv
+monteCarloPassSearch/initParamVar/passer_rankings*.png
+monteCarloPassSearch/initParamVar/tmp_manifest*.jsonl
+monteCarloPassSearch/initParamVar/viz*/
+monteCarloPassSearch/initParamVar/plot_*.py
+monteCarloPassSearch/initParamVar/visualize_*.py
+
+# ballAtTouch artifacts
+ballAtTouch/**/checkpoints/
+ballAtTouch/**/logs/
+ballAtTouch/**/preprocessed/
+ballAtTouch/**/preprocessed_*/
+
+# ballPlayerTrajModel artifacts
+ballPlayerTrajModel/checkpoints/
+ballPlayerTrajModel/logs/
+ballPlayerTrajModel/preprocess_logs/
+ballPlayerTrajModel/preprocessed/
+ballPlayerTrajModel/publicData/preprocessed/
+ballPlayerTrajModel/publicData/stages/
+ballPlayerTrajModel/residualFromConstantVel/
+ballPlayerTrajModel/trash(bad)_preprocessed/
+
+# playerToTouch artifacts
+playerToTouch/checkpoints/
+playerToTouch/logs/
+playerToTouch/preprocessed/
+playerToTouch/preprocessed_*/
+playerToTouch/hybrid_eval_result*.json
+
+# possessionValue artifacts
+possessionValue/checkpoints/
+possessionValue/eval_pv_output/
+possessionValue/pv_data/
+possessionValue/xg_data/
+possessionValue/xt_data/
+
+# SMART artifacts
+trajModel_smart/checkpoints/
