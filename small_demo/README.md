@@ -17,7 +17,7 @@ the Deutsche Fußball Liga and cite the IDSSE paper.
 
 Open `mcps_small_colab.ipynb`, set `REPO_URL` to the Git URL containing this
 implementation, select a GPU runtime, and run all cells. The default run uses
-the first 60,000 tracking frames (about 40 minutes) from match `J03WN1`,
+the first 30,000 tracking frames (about 20 minutes) from match `J03WN1`,
 downloads about 392 MB, and targets a 1–2 hour Colab session.
 Runtime depends on the GPU assigned by Colab and is recorded rather than
 assumed.

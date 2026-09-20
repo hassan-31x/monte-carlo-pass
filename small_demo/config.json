@@ -4,7 +4,7 @@
   "work_dir": "artifacts/mcps_small",
   "history_frames": 96,
   "future_frames": 320,
-  "max_frames": 60000,
+  "max_frames": 30000,
   "split_ratios": [0.70, 0.15, 0.15],
   "caps": {
     "smart_train_windows": 512,

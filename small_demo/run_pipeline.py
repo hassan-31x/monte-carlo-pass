@@ -19,6 +19,17 @@ RESEARCH = ROOT / "monteCarloPassSearch"
 HERE = Path(__file__).resolve().parent
 
 
+class PipelineStageError(RuntimeError):
+    """Failure with enough context to diagnose it from a Colab cell."""
+
+    def __init__(self, name: str, command: list[str], code: int, log_path: Path) -> None:
+        self.name = name
+        self.command = command
+        self.code = code
+        self.log_path = log_path
+        super().__init__(f"Pipeline stage {name!r} failed with exit code {code}")
+
+
 class Pipeline:
     def __init__(self, config_path: Path) -> None:
         self.config_path = config_path.resolve()
@@ -107,7 +118,7 @@ class Pipeline:
         self.compute["stages"].append(record)
         self.compute_path.write_text(json.dumps(self.compute, indent=2), encoding="utf-8")
         if code:
-            raise subprocess.CalledProcessError(code, command)
+            raise PipelineStageError(name, command, code, log_path)
 
     def prepare(self) -> None:
         raw = self.work / "tracking_raw_split"
@@ -292,14 +303,37 @@ def main() -> None:
     parser.add_argument("--config", type=Path, default=HERE / "config.json")
     args = parser.parse_args()
     pipeline = Pipeline(args.config)
-    if args.stage in {"prepare", "all"}:
-        pipeline.prepare()
-    if args.stage in {"train", "all"}:
-        pipeline.train()
-    if args.stage in {"search", "all"}:
-        pipeline.search()
-    if args.stage in {"report", "all"}:
-        pipeline.report()
+    try:
+        if args.stage in {"prepare", "all"}:
+            pipeline.prepare()
+        if args.stage in {"train", "all"}:
+            pipeline.train()
+        if args.stage in {"search", "all"}:
+            pipeline.search()
+        if args.stage in {"report", "all"}:
+            pipeline.report()
+    except PipelineStageError as exc:
+        try:
+            lines = exc.log_path.read_text(encoding="utf-8", errors="replace").splitlines()
+        except OSError:
+            lines = []
+        print("\n" + "=" * 78, file=sys.stderr)
+        print(f"FAILED STAGE: {exc.name}", file=sys.stderr)
+        print(f"EXIT CODE:    {exc.code}", file=sys.stderr)
+        print(f"COMMAND:      {' '.join(exc.command)}", file=sys.stderr)
+        print(f"FULL LOG:     {exc.log_path}", file=sys.stderr)
+        if exc.code in {-9, 137}:
+            print(
+                "HINT: the process was killed, usually because the Colab runtime ran out of RAM.",
+                file=sys.stderr,
+            )
+        if lines:
+            print("\nLAST 80 LOG LINES:\n", file=sys.stderr)
+            print("\n".join(lines[-80:]), file=sys.stderr)
+        else:
+            print("The stage produced no log output.", file=sys.stderr)
+        print("=" * 78, file=sys.stderr)
+        raise SystemExit(1) from None
 
 
 if __name__ == "__main__":
